@@ -22,15 +22,43 @@
           <div class="card-body">
             <h5 class="card-title">{{restaurant.name}}</h5>
             <p class="card-text">{{restaurant.description|truncatechars:25}}</p>
-          </div>
+          
           <ul class="list-group list-group-flush">
             <li class="list-group-item text-center">
                 <a href="{% url 'restaurant-detail' restaurant.id %}" class="btn btn-outline-dark">View</a>
             </li>
+
           </ul>
+          <br>
+
+          <button id = "button-{{restaurant.id}}" class ="btn" onclick="favorite({{restaurant.id}})"><i class ="fas fa-heart text-danger"></i></button>
+
+        </div>
         </div>
     </div>
     {% endfor %}
 </div>
+
+<script>
+function favorite(restaurant_id){
+
+  let button_id = "#button-"+restaurant_id
+  $.ajax({
+    url: "/restaurants/"+restaurant_id+"/favorite/",
+    type: "GET",
+    success: function(data){
+      if(data.action === "favorite"){
+        $(button_id).addClass('text-danger')
+      }
+      else{
+        $(button_id).removeClass('text-danger')
+      }
+    },
+    error: function(){
+      alert("Something went Wrong!")
+    },
+  })
+}
+</script>
 {% endblock content %}
 
