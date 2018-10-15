@@ -31,7 +31,7 @@
           </ul>
           <br>
 
-          <button id = "button-{{restaurant.id}}" class ="btn" onclick="favorite({{restaurant.id}})"><i class ="fas fa-heart {% if restaurant.id in favorites%}  text-danger {% endif %}"></i></button>
+          <button class ="btn" onclick="favorite({{restaurant.id}})"><i id = "button-{{restaurant.id}}" class ="fas fa-heart {% if restaurant.id in favorites%}  text-danger {% endif %}"></i></button>
 
         </div>
         </div>
