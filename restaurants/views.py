@@ -8,24 +8,38 @@ from django.contrib.auth.models import User
 
 # This view will be used to favorite a restaurant
 def restaurant_favorite(request, restaurant_id):
+
     restaurant_obj = Restaurant.objects.get(id= restaurant_id)
-    favorited, created = favorite.objects.get_or_create(restaurant=restaurant_obj, user=request.user)
+    favorited, created = FavoriteRestaurant.objects.get_or_create(restaurant=restaurant_obj, user=request.user)
     if created:
         action = "favorite"
     else:
         action = "unfavorite"
         favorited.delete()
     data = {
-    "action": "YAY"
+    "action": action
     }
     
     return JsonResponse(data)
-    
+
 # This view will be used to display only restaurants a user has favorited
 def favorite_restaurants(request):
+    if request.user.is_anonymous:
+        return redirect("signin")
+    restaurants = []
+    my_favorites = []
+    for favorite in FavoriteRestaurant.objects.filter(user = request.user):
+        my_favorites.append(favorite.restaurant.id)
+        restaurants.append(favorite.restaurant)
 
+
+
+    context = {
+        'restaurants': restaurants,
+        'favorites': my_favorites,
+       }
     
-    return
+    return render(request, 'favorites.html', context)
 
 
 def no_access(request):
@@ -71,6 +85,7 @@ def signout(request):
     return redirect("signin")
 
 def restaurant_list(request):
+
     restaurants = Restaurant.objects.all()
     query = request.GET.get('q')
     if query:
@@ -85,8 +100,9 @@ def restaurant_list(request):
         ).distinct()
         #############
     my_favorites = []
-    for favorite in FavoriteRestaurant.objects.filter(user = request.user):
-        my_favorites.append(favorite.restaurant.id)
+    if not request.user.is_anonymous:
+        for favorite in FavoriteRestaurant.objects.filter(user = request.user):
+            my_favorites.append(favorite.restaurant.id)
 
     context = {
        "restaurants": restaurants,
