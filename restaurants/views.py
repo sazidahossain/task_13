@@ -5,6 +5,7 @@ from django.contrib.auth import login, authenticate, logout
 from django.db.models import Q
 from django.http import JsonResponse
 from django.contrib.auth.models import User
+import requests
 
 # This view will be used to favorite a restaurant
 def restaurant_favorite(request, restaurant_id):
@@ -85,7 +86,6 @@ def signout(request):
     return redirect("signin")
 
 def restaurant_list(request):
-
     restaurants = Restaurant.objects.all()
     query = request.GET.get('q')
     if query:
@@ -176,3 +176,10 @@ def restaurant_delete(request, restaurant_id):
         return redirect('no-access')
     restaurant_obj.delete()
     return redirect('restaurant-list')
+
+def test_api(request):
+    url = 'https://api.github.com/events'
+    response = requests.get(url)
+    context={"response":response.json(),}
+    return render(request,'api.html',context)
+    

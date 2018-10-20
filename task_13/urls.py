@@ -1,6 +1,6 @@
 
 from django.contrib import admin
-from django.urls import path
+from django.urls import path,include
 from restaurants import views
 from django.conf import settings
 from django.conf.urls.static import static
@@ -25,6 +25,8 @@ urlpatterns = [
 
     path('restaurants/favorite/',views.favorite_restaurants ,name='favorite-restaurant'),
     path('restaurants/<int:restaurant_id>/favorite/',views.restaurant_favorite ,name='restaurant-favorite'),
+    path('accounts/', include('allauth.urls'),name='accounts'),
+    path('test_api/',views.test_api ,name='test'),
 ]
 
 if settings.DEBUG:

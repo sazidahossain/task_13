@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}List{% endblock title %}
+
+{% block content %}
+
+<div class="row">
+    {% for event in response %}
+    <div class="col-md-4">
+        <div class="card my-card">
+            <img class="card-img-top" src="{{event.actor.avatar_url}}" alt="Hey Noob, look at me...">
+          <div class="card-body">
+            <h5 class="card-title">{{event.actor.display_login}}</h5>
+            <p class="card-text">{{event.type|truncatechars:25}}</p>
+</div>
+        </div>
+        </div>
+   
+    {% endfor %}
+</div>
+
+{% endblock content %}
